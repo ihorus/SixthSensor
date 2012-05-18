@@ -1,0 +1,1 @@
+<p>&copy; ICT Facilities, Wallingford School {{v. <?php echo (SITE_VERSION); ?>}}</p>
