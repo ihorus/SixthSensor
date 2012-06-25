@@ -59,7 +59,7 @@ foreach($reports AS $report) {
 		}
 		
 		$my_file = "daily.csv";
-		$my_path = $_SERVER['DOCUMENT_ROOT']."/sixthSensor/actions/tempReports/";
+		$my_path = $_SERVER['DOCUMENT_ROOT']."/sixthSensor/actions/tempReports/" . $my_file;
 		$my_name = "Sixth Sensor";
 		$my_mail = SITE_ADMIN_EMAIL;
 		$my_replyto = SITE_ADMIN_EMAIL;
@@ -67,9 +67,9 @@ foreach($reports AS $report) {
 		$my_message = $output;
 		$mailTo = $report->email;
 		
-		echo "sending mail to " . $report->email;
-		//sendMailWithAttachment($my_file, $my_path, $mailTo, $my_mail, $my_name, $my_replyto, $my_subject, $my_message);
-		//sendMail($mailTo, $my_subject, $my_message);
+		echo "sending mail to " . $report->email . "<br />";
+		sendMail($mailTo, $my_subject, $my_message, $my_path);
+		
 		echo $output;
 	}
 }

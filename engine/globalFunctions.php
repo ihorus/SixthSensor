@@ -317,64 +317,29 @@ function scholasticYears() {
 	return $yearsArray;
 }
 
-function sendMail($recipient, $subject, $message) {
-
-	if (!isset($subject)) {
-		$subject = ("Auto Generated E-Mail from " . SITE_NAME);
+function sendMail($recipient, $subject = "Auto Generated Report", $message, $attachment = NULL) {
+	$mail = new phpmailer;
+	
+	$mail->IsSMTP(); // set mailer to use SMTP
+	$mail->From = "no-reply@wallingfordschool.com";
+	$mail->FromName = SITE_NAME;
+	$mail->Host = "10.111.240.142";  // specify main and backup server
+	//$mail->AddAddress($recipient, "Recipient");
+	$mail->AddAddress($recipient, "Recipient");
+	$mail->AddReplyTo("no-reply@wallingfordschool.com", "No Reply");
+	$mail->WordWrap = 70;    // set word wrap
+	$mail->Encoding = "8bit";
+	
+	if (!$attachment == NULL) {
+		// add attachments
+		//$mail->AddAttachment($attachment);  
+		//$mail->AddAttachment("c:/temp/11-10-00.zip");
 	}
-	// Function to send a simple e-mail
-	$headers  = 'MIME-Version: 1.0' . "\r\n";
-	$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
 	
-	$headers .= "To: " . $recipient . "\r\n";
-	$headers .= "From: " . SITE_NAME . " <no-reply@wallingford.oxon.sch.uk>" . "\r\n";
-	$headers .= "Reply-To: no-reply@wallingford.oxon.sch.uk" . "\r\n";
+	$mail->IsHTML(true);    // set email format to HTML
+	$mail->Subject = $subject;
+	$mail->Body = $message;
 	
-	// Additional headers
-	// $headers .= 'Cc: birthdayarchive@example.com' . "\r\n";
-	// $headers .= 'Bcc: birthdaycheck@example.com' . "\r\n";
-
-	$message = ($message);
-	
-	if (isset($recipient)) {
-		//echo("<p>Message send complete…</p>");
-		//echo $recipient . $subject . $message;
-		mail($recipient, $subject, $message, $headers);
-	} else {
-		//echo("<p>Message delivery failed...</p>");
-		//echo $recipient . $subject . $message;
-		return FALSE;
-	}
-}
-
-function sendMailWithAttachment($filename = NULL, $path = NULL, $mailto, $from_mail, $from_name, $replyto, $subject, $message) {
-	$file = $path.$filename;
-	$file_size = filesize($file);
-	$handle = fopen($file, "r");
-	$content = fread($handle, $file_size);
-	fclose($handle);
-	$content = chunk_split(base64_encode($content));
-	$uid = md5(uniqid(time()));
-	$name = basename($file);
-    $header = "From: ".$from_name." <".$from_mail.">\r\n";
-    $header .= "Reply-To: ".$replyto."\r\n";
-    $header .= "MIME-Version: 1.0\r\n";
-    $header .= "Content-Type: multipart/mixed; boundary=\"".$uid."\"\r\n\r\n";
-    $header .= "This is a multi-part message in MIME format.\r\n";
-    $header .= "--".$uid."\r\n";
-    $header .= "Content-type:text/html; charset=iso-8859-1\r\n";
-    $header .= "Content-Transfer-Encoding: 7bit\r\n\r\n";
-    $header .= $message."\r\n\r\n";
-    $header .= "--".$uid."\r\n";
-    $header .= "Content-Type: application/octet-stream; name=\"".$filename."\"\r\n"; // use different content types here
-    $header .= "Content-Transfer-Encoding: base64\r\n";
-    $header .= "Content-Disposition: attachment; filename=\"".$filename."\"\r\n\r\n";
-    $header .= $content."\r\n\r\n";
-    $header .= "--".$uid."--";
-    if (mail($mailto, $subject, "", $header)) {
-        echo "Sending e-mail to " . $mailto . " completed.";
-    } else {
-        echo "Sending e-mail to " . $mailto . " failed.";
-    }
+	$mail->Send(); // send message
 }
 ?>

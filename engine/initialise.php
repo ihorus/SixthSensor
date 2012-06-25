@@ -1,5 +1,6 @@
 <?php
-$includes = array();
+unset($includes);
+
 
 $includes[] = "engine/config.php";
 $includes[] = "engine/globalFunctions.php";
@@ -11,6 +12,7 @@ $includes[] = "engine/tagsClass.php";
 $includes[] = "engine/sensorsClass.php";
 $includes[] = "engine/locationClass.php";
 $includes[] = "engine/chartsClass.php";
+$includes[] = "engine/phpmailer.inc.php";
 
 foreach ($includes as $include) {
 	if (file_exists($include)) {
